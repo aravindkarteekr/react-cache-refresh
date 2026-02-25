@@ -6,6 +6,7 @@ type CacheBusterProps = {
   readonly loadingComponent?: ReactNode;
   readonly currentAppVersion: string;
   readonly hideConsoleLogs?: boolean;
+  readonly metaJsonPath?: string;
 };
 
 export const CacheBuster = ({
@@ -13,6 +14,7 @@ export const CacheBuster = ({
   loadingComponent,
   currentAppVersion,
   hideConsoleLogs,
+  metaJsonPath,
 }: CacheBusterProps) => {
   const [loading, setLoading] = useState(true);
   const isCheckingRef = useRef(false);
@@ -44,9 +46,10 @@ export const CacheBuster = ({
           setLoading(false);
           return;
         }
-
+        
         // Nginx ensures meta.json is never cached, so no need for cache-busting
-        const response = await fetch("/meta.json");
+        const metaUrl = metaJsonPath ?? "/meta.json";
+        const response = await fetch(metaUrl);
 
         // Handle missing meta.json (404 or other errors)
         if (!response.ok) {
