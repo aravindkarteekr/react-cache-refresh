@@ -16,9 +16,9 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
       - name: Build package
-        run: yarn build
+        run: npm run build
       - name: Run tests
         run: npm run test --if-present
       - name: Publish to NPM
