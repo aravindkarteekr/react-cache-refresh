@@ -11,6 +11,7 @@ A modern, lightweight React utility that automatically detects new app versions 
 - **Reload Protection**: Prevents infinite reload loops with built-in cooldown mechanism
 - **Error Resilient**: Gracefully handles missing meta.json or network errors
 - **Configurable Logging**: Hide console logs in production with `hideConsoleLogs` option
+- **Custom Metadata Path**: Support for custom paths to the version metadata file with `metaJsonPath`
 - **Custom Loading States**: Show custom loading components during version checks
 - **Zero Dependencies**: Only requires React as a peer dependency
 
@@ -77,12 +78,13 @@ The main component that wraps your application and handles version checking.
 
 #### Props
 
-| Prop                | Type        | Required | Default | Description                                           |
-| ------------------- | ----------- | -------- | ------- | ----------------------------------------------------- |
-| `children`          | `ReactNode` | ✅       | -       | Your app components                                   |
-| `currentAppVersion` | `string`    | ✅       | -       | Current version of your app                           |
-| `loadingComponent`  | `ReactNode` | ❌       | `null`  | Custom loading component (shown during version check) |
-| `hideConsoleLogs`   | `boolean`   | ❌       | `false` | Hide console logs for version checking process        |
+| Prop                | Type        | Required | Default               | Description                                           |
+| ------------------- | ----------- | -------- | --------------------- | ----------------------------------------------------- |
+| `children`          | `ReactNode` | ✅       | -                     | Your app components                                   |
+| `currentAppVersion` | `string`    | ✅       | -                     | Current version of your app                           |
+| `loadingComponent`  | `ReactNode` | ❌       | `null`                | Custom loading component (shown during version check) |
+| `hideConsoleLogs`   | `boolean`   | ❌       | `false`               | Hide console logs for version checking process        |
+| `metaJsonPath`      | `string`    | ❌       | `"/custom-path.json"` | Custom path to the version metadata JSON file         |
 
 #### Example with Custom Loading and Options
 
@@ -100,6 +102,7 @@ function Root() {
       currentAppVersion={VERSION}
       loadingComponent={<LoadingSpinner />}
       hideConsoleLogs={process.env.NODE_ENV === "production"}
+      metaJsonPath="/custom-path.json"
     >
       <App />
     </CacheBuster>
@@ -335,7 +338,7 @@ fs.writeFileSync(
   "public/meta.json",
   JSON.stringify({
     version: packageJson.version,
-  })
+  }),
 );
 ```
 
