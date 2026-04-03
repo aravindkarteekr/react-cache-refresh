@@ -17,9 +17,22 @@ jobs:
           node-version: 24
       - name: Install dependencies (Root)
         run: npm ci
-      - name: Build package (Root)
-        run: npm run build
+      - name: Build and Pack
+        id: pack
+        run: |
+          npm run build
+          # Capture the filename of the generated tarball using jq
+          PACK_OUTPUT=$(npm pack --json)
+          FILENAME=$(echo $PACK_OUTPUT | jq -r '.[0].filename')
+          echo "tgz_name=$FILENAME" >> $GITHUB_OUTPUT
       - name: Run tests
         run: npm run test --if-present
       - name: Dry run publish
         run: npm publish --dry-run
+      - name: Integration Test (test-app)
+        run: |
+          cd test-app
+          # Install using the actual tarball from the root
+          npm install $GITHUB_WORKSPACE/${{ steps.pack.outputs.tgz_name }} --no-save
+          npm run build
+          npm run lint
