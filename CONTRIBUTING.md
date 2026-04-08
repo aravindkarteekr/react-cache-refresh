@@ -65,7 +65,11 @@ src/
 ├── index.ts          # Main entry point
 └── utils.ts          # Utility functions
 
-test-app/             # Test application for development
+test-app/             # Test application for development (local link)
+├── src/
+└── public/
+
+test-app-previous/    # Test application for previous version (NPM)
 ├── src/
 └── public/
 ```
@@ -182,12 +186,20 @@ export const clearCache = (options: any) => {
 
 ### Running Tests
 
-Currently, the project uses a test application for manual testing:
+Currently, the project uses test applications for manual testing:
 
+**Current Version (Local):**
 ```bash
 cd test-app
 npm install
 npm run dev
+```
+
+**Previous Version (NPM):**
+```bash
+# From root directory
+npm run test:prev:install
+npm run test:prev
 ```
 
 ### Adding Tests
@@ -214,6 +226,18 @@ If your changes affect usage:
 - Add JSDoc comments for public APIs
 - Include usage examples in comments
 - Document any complex algorithms or logic
+
+## Troubleshooting
+
+### Dual React Instance (Invalid Hook Call)
+
+If you encounter an error like `TypeError: Cannot read properties of null (reading 'useState')`, it is likely due to multiple instances of React being loaded in your project. This often happens if the library's `react` dependency is not correctly deduped with the host application.
+
+**How to fix:**
+
+1.  **Check for duplicates**: Run `npm list react` in your project root. If you see more than one version or path, you have a duplicate.
+2.  **Dedupe**: Run `npm dedupe` or manually remove the nested `node_modules` inside the library directory.
+3.  **Link correctly**: If you are developing locally, ensure you are using `file:..` or a proper linking mechanism that respects peer dependencies.
 
 ## Reporting Issues
 
