@@ -55,6 +55,8 @@
   "scripts": {
     "build": "babel src -d dist --extensions '.ts,.tsx' && tsc --emitDeclarationOnly",
     "test": "echo \"No tests specified\"",
+    "test:prev": "cd test-app-previous && npm run dev",
+    "test:prev:install": "cd test-app-previous && npm install",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

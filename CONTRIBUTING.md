@@ -65,7 +65,11 @@ src/
 ├── index.ts          # Main entry point
 └── utils.ts          # Utility functions
 
-test-app/             # Test application for development
+test-app/             # Test application for development (local link)
+├── src/
+└── public/
+
+test-app-previous/    # Test application for previous version (NPM)
 ├── src/
 └── public/
 ```
@@ -182,12 +186,20 @@ export const clearCache = (options: any) => {
 
 ### Running Tests
 
-Currently, the project uses a test application for manual testing:
+Currently, the project uses test applications for manual testing:
 
+**Current Version (Local):**
 ```bash
 cd test-app
 npm install
 npm run dev
+```
+
+**Previous Version (NPM):**
+```bash
+# From root directory
+npm run test:prev:install
+npm run test:prev
 ```
 
 ### Adding Tests
