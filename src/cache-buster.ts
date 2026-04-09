@@ -30,7 +30,7 @@ export const CacheBuster = ({
       try {
         // Simple cooldown to prevent rapid reloads (safety net)
         const lastReloadAttempt = sessionStorage.getItem(
-          "cache-buster-last-reload"
+          "cache-buster-last-reload",
         );
         const now = Date.now();
         const RELOAD_COOLDOWN = 5000; // 5 seconds - shorter since nginx is reliable
@@ -41,21 +41,22 @@ export const CacheBuster = ({
         ) {
           !hideConsoleLogs &&
             console.warn(
-              "Recent reload detected, continuing with current version"
+              "Recent reload detected, continuing with current version",
             );
           setLoading(false);
           return;
         }
-        
+
         // Nginx ensures meta.json is never cached, so no need for cache-busting
-        const metaUrl = metaJsonPath ?? "/meta.json";
+        const metaUrl =
+          metaJsonPath ?? "/meta.json" + "reloadTime=" + Date.now();
         const response = await fetch(metaUrl);
 
         // Handle missing meta.json (404 or other errors)
         if (!response.ok) {
           !hideConsoleLogs &&
             console.warn(
-              `meta.json not found (${response.status}) - skipping version check`
+              `meta.json not found (${response.status}) - skipping version check`,
             );
           setLoading(false);
           return;
@@ -72,7 +73,7 @@ export const CacheBuster = ({
         if (latestVersion !== currentAppVersion) {
           !hideConsoleLogs &&
             console.info(
-              "Version mismatch detected - clearing caches and reloading"
+              "Version mismatch detected - clearing caches and reloading",
             );
 
           // Record reload attempt timestamp to prevent infinite loops
